@@ -22,6 +22,14 @@ export default function App() {
       rows[i].push(puzzle[i * 9 + k]);
     }
   }
+
+  const columns = [];
+  for (let i = 0; i < 9; i++) {
+    columns[i] = [];
+    for (let k = 0; k < 9; k++) {
+      columns[i].push(puzzle[i + k * 9]);
+    }
+  }
   const squares = [];
 
   squares[0] = [
@@ -149,6 +157,7 @@ export default function App() {
         solution={solution}
         squares={squares}
         rows={rows}
+        columns={columns}
       ></Board>
       <StatusBar style="auto" />
     </View>

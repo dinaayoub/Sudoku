@@ -11,7 +11,18 @@ export default class Board extends Component {
       solution: props.solution,
       squares: props.squares,
       rows: props.rows,
+      columns: props.columns,
+      selectedCells: [],
     };
+  }
+
+  toggleCellSelection(cellNumber) {
+    let index = selectedCells.indexOf(cellNumber);
+    if (index > -1) {
+      selectedCells.splice(index, 1);
+    } else {
+      selectedCells.push(cellNumber);
+    }
   }
 
   render() {
