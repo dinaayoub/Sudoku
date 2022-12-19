@@ -12,16 +12,23 @@ export default class Board extends Component {
       squares: props.squares,
       rows: props.rows,
       columns: props.columns,
+      squareMap: props.squareMap,
       selectedCells: [],
     };
   }
 
-  toggleCellSelection(cellNumber) {
-    let index = selectedCells.indexOf(cellNumber);
+  toggleCellSelection(squareNumber, squareCellNumber) {
+    // Look it up in the squareMap using the square number to find the index of the map in SquareMap,
+    // then using the cell Number to find the object in the map, which will then have a "cell number"
+    let puzzleCellNumber =
+      this.state.squareMap[squareNumber].get(squareCellNumber).cellNumber;
+    let index = this.state.selectedCells.indexOf(puzzleCellNumber);
     if (index > -1) {
-      selectedCells.splice(index, 1);
+      //TODO: uncomment this or replace with a setState
+      //this.state.selectedCells.splice(index, 1);
     } else {
-      selectedCells.push(cellNumber);
+      //TODO: uncomment this or replace with a setState
+      // this.state.selectedCells.push(puzzleCellNumber);
     }
   }
 
@@ -29,7 +36,11 @@ export default class Board extends Component {
     return (
       <View style={styles.container}>
         <HStack style={styles.row}>
-          <Square squareData={this.state.squares[0]} />
+          <Square
+            squareData={this.state.squares[0]}
+            squareNumber={1}
+            toggleCellSelection={this.toggleCellSelection}
+          />
           <Square squareData={this.state.squares[1]} />
           <Square squareData={this.state.squares[2]} />
         </HStack>
