@@ -9,48 +9,41 @@ export default class Square extends Component {
       squareData: props.squareData,
       squareNumber: props.squareNumber,
       localSelectedCells: [],
+      throwaway: "",
     };
   }
 
   toggleLocalCellSelection(cellNumber) {
-    let index = this.state.selectedCells.indexOf(cellNumber);
+    let index = this.state.localSelectedCells.indexOf(cellNumber);
+    // this.setState({ throwaway: "index : " + index });
     if (index > -1) {
-      //TODO: uncomment this
-      this.setState(
-        localSelectedCells,
-        this.state.localSelectedCells.splice(index, 1)
-      );
+      const removeSelected = this.state.localSelectedCells.map((item) => {
+        if (item != cellNumber) {
+          return item;
+        }
+      });
+      this.setState({ ...this.state, localSelectedCells: removeSelected });
     } else {
-      // TODO: unsure if this is necessary. Can we just do:
-      // this.state.localSelectedCells.push(cellNumber);
-      //TODO: uncomment this
-      const selectedCells = this.state.localSelectedCells;
+      const selectedCells = this.state.localSelectedCells.map((item) => item);
       selectedCells.push(cellNumber);
-      this.setState(localSelectedCells, selectedCells);
+      this.setState({ ...this.state, localSelectedCells: selectedCells });
     }
   }
 
   onPress(event, cellNumber) {
-    // Do the work to find the cell number in the map, or something!
+    this.toggleLocalCellSelection(cellNumber);
     this.props.toggleCellSelection(this.state.squareNumber, cellNumber);
-    //change the style of the selected cell
-    if (this.state.localSelectedCells.indexOf(cellNumber) > -1) {
-      // remove the cell number from the local selected cells
-      this.toggleLocalCellSelection(cellNumber);
-    } else {
-      const selectedCells = this.state.localSelectedCells;
-      selectedCells.push(cellNumber);
-      this.setState(localSelectedCells, selectedCells);
-      // this.state.localSelectedCells.push(cellNumber);
-    }
-    // ignore default
+
+    // ignore default, is this needed?
     event.ignoreDefault();
   }
 
   render() {
     return (
       <HStack style={styles.container}>
-        <Text>{this.state.selectedCells}</Text>
+        <Text>
+          {this.state.localSelectedCells} {this.state.throwaway}
+        </Text>
         <HStack style={styles.row}>
           <Text
             style={

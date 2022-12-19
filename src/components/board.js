@@ -24,8 +24,9 @@ export default class Board extends Component {
       this.state.squareMap[squareNumber].get(squareCellNumber).cellNumber;
     let index = this.state.selectedCells.indexOf(puzzleCellNumber);
     if (index > -1) {
-      //TODO: uncomment this or replace with a setState
-      //this.state.selectedCells.splice(index, 1);
+      const removeSelected = this.state.selectedCells;
+      removeSelected.splice(index, 1);
+      this.setState(selectedCells, removeSelected);
     } else {
       //TODO: uncomment this or replace with a setState
       // this.state.selectedCells.push(puzzleCellNumber);
