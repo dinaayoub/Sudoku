@@ -64,9 +64,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   board: {
-    width: 300,
+    flex: 1,
   },
   appbar: {
-    width: 300,
+    width: "100%",
   },
 });

@@ -1,161 +1,170 @@
 import React, { Component } from "react";
 import { HStack } from "@react-native-material/core";
-import { StyleSheet, Text } from "react-native";
+import { StyleSheet, Text, TouchableHighlight } from "react-native";
 
 export default class Square extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      squareData: props.squareData,
+      originalSquareData: props.squareData,
+      updatedSquareData: props.squareData,
       squareNumber: props.squareNumber,
-      localSelectedCells: [],
+      multiSelectIsEnabled: props.multiSelectIsEnabled,
+      selectedCells: [],
       throwaway: "",
     };
   }
 
   toggleLocalCellSelection(cellNumber) {
-    let index = this.state.localSelectedCells.indexOf(cellNumber);
-    // this.setState({ throwaway: "index : " + index });
-    if (index > -1) {
-      const removeSelected = this.state.localSelectedCells.map((item) => {
-        if (item != cellNumber) {
-          return item;
-        }
-      });
-      this.setState({ ...this.state, localSelectedCells: removeSelected });
+    let index = this.state.selectedCells.indexOf(cellNumber);
+    if (index < 0) {
+      if (this.props.multiSelectIsEnabled) {
+        // the selected cell number is not in the local selected cells, and multiselect is on, add the cell to the SelectedCells
+        const selectedCells = [...this.state.selectedCells];
+        selectedCells.push(cellNumber);
+        this.setState({
+          selectedCells: selectedCells,
+        });
+      } else {
+        // otherwise, overwrite the selected cells with just the new cell
+        this.setState({ selectedCells: [cellNumber] });
+      }
     } else {
-      const selectedCells = this.state.localSelectedCells.map((item) => item);
-      selectedCells.push(cellNumber);
-      this.setState({ ...this.state, localSelectedCells: selectedCells });
+      // the selected cell number is already in the local Selected cells, so just de-select it
+      const filteredSelectedCells = this.state.selectedCells.filter(
+        (number) => number !== cellNumber
+      );
+      this.setState({
+        selectedCells: filteredSelectedCells,
+      });
     }
   }
 
-  onPress(event, cellNumber) {
-    this.toggleLocalCellSelection(cellNumber);
-    this.props.toggleCellSelection(this.state.squareNumber, cellNumber);
-
-    // ignore default, is this needed?
-    event.ignoreDefault();
+  onPress(cellNumber) {
+    if (this.state.originalSquareData[cellNumber] == undefined) {
+      this.toggleLocalCellSelection(cellNumber);
+      this.props.toggleCellSelection(this.state.squareNumber, cellNumber);
+    }
   }
 
   render() {
+    // TODO: convert this to i, then i can just put 9 of the same text component
+    // let i = 0;
     return (
       <HStack style={styles.container}>
-        <Text>
-          {this.state.localSelectedCells} {this.state.throwaway}
-        </Text>
         <HStack style={styles.row}>
           <Text
             style={
-              this.state.localSelectedCells.indexOf(0) > -1
+              this.state.selectedCells.indexOf(0) > -1
                 ? styles.selectedCell
                 : styles.cell
             }
-            onPress={(event) => {
-              this.onPress(event, 0);
+            onPress={() => {
+              this.onPress(0);
             }}
           >
-            {this.state.squareData[0]}
+            {this.state.updatedSquareData[0]}
+          </Text>
+
+          <Text
+            style={
+              this.state.selectedCells.indexOf(1) > -1
+                ? styles.selectedCell
+                : styles.cell
+            }
+            onPress={() => {
+              this.onPress(1);
+            }}
+          >
+            {this.state.updatedSquareData[1]}
           </Text>
           <Text
             style={
-              this.state.localSelectedCells.indexOf(1) > -1
+              this.state.selectedCells.indexOf(2) > -1
                 ? styles.selectedCell
                 : styles.cell
             }
-            onPress={(event) => {
-              this.onPress(event, 1);
+            onPress={() => {
+              this.onPress(2);
             }}
           >
-            {this.state.squareData[1]}
-          </Text>
-          <Text
-            style={
-              this.state.localSelectedCells.indexOf(2) > -1
-                ? styles.selectedCell
-                : styles.cell
-            }
-            onPress={(event) => {
-              this.onPress(event, 2);
-            }}
-          >
-            {this.state.squareData[2]}
+            {this.state.updatedSquareData[2]}
           </Text>
         </HStack>
         <HStack style={styles.row}>
           <Text
             style={
-              this.state.localSelectedCells.indexOf(3) > -1
+              this.state.selectedCells.indexOf(3) > -1
                 ? styles.selectedCell
                 : styles.cell
             }
-            onPress={(event) => {
-              this.onPress(event, 3);
+            onPress={() => {
+              this.onPress(3);
             }}
           >
-            {this.state.squareData[3]}
+            {this.state.updatedSquareData[3]}
           </Text>
           <Text
             style={
-              this.state.localSelectedCells.indexOf(4) > -1
+              this.state.selectedCells.indexOf(4) > -1
                 ? styles.selectedCell
                 : styles.cell
             }
-            onPress={(event) => {
-              this.onPress(event, 4);
+            onPress={() => {
+              this.onPress(4);
             }}
           >
-            {this.state.squareData[4]}
+            {this.state.updatedSquareData[4]}
           </Text>
           <Text
             style={
-              this.state.localSelectedCells.indexOf(5) > -1
+              this.state.selectedCells.indexOf(5) > -1
                 ? styles.selectedCell
                 : styles.cell
             }
-            onPress={(event) => {
-              this.onPress(event, 5);
+            onPress={() => {
+              this.onPress(5);
             }}
           >
-            {this.state.squareData[5]}
+            {this.state.updatedSquareData[5]}
           </Text>
         </HStack>
         <HStack style={styles.row}>
           <Text
             style={
-              this.state.localSelectedCells.indexOf(6) > -1
+              this.state.selectedCells.indexOf(6) > -1
                 ? styles.selectedCell
                 : styles.cell
             }
-            onPress={(event) => {
-              this.onPress(event, 6);
+            onPress={() => {
+              this.onPress(6);
             }}
           >
-            {this.state.squareData[6]}
+            {this.state.updatedSquareData[6]}
           </Text>
           <Text
             style={
-              this.state.localSelectedCells.indexOf(7) > -1
+              this.state.selectedCells.indexOf(7) > -1
                 ? styles.selectedCell
                 : styles.cell
             }
-            onPress={(event) => {
-              this.onPress(event, 7);
+            onPress={() => {
+              this.onPress(7);
             }}
           >
-            {this.state.squareData[7]}
+            {this.state.updatedSquareData[7]}
           </Text>
           <Text
             style={
-              this.state.localSelectedCells.indexOf(8) > -1
+              this.state.selectedCells.indexOf(8) > -1
                 ? styles.selectedCell
                 : styles.cell
             }
-            onPress={(event) => {
-              this.onPress(event, 8);
+            onPress={() => {
+              this.onPress(8);
             }}
           >
-            {this.state.squareData[8]}
+            {this.state.updatedSquareData[8]}
           </Text>
         </HStack>
       </HStack>

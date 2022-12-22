@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Square from "./square";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Switch } from "react-native";
 import { HStack } from "@react-native-material/core";
 
 export default class Board extends Component {
@@ -14,24 +14,44 @@ export default class Board extends Component {
       columns: props.columns,
       squareMap: props.squareMap,
       selectedCells: [],
+      multiSelectIsEnabled: false,
     };
   }
 
-  toggleCellSelection(squareNumber, squareCellNumber) {
-    // Look it up in the squareMap using the square number to find the index of the map in SquareMap,
-    // then using the cell Number to find the object in the map, which will then have a "cell number"
+  toggleCellSelection = (squareNumber, squareCellNumber) => {
     let puzzleCellNumber =
       this.state.squareMap[squareNumber].get(squareCellNumber).cellNumber;
     let index = this.state.selectedCells.indexOf(puzzleCellNumber);
-    if (index > -1) {
-      const removeSelected = this.state.selectedCells;
-      removeSelected.splice(index, 1);
-      this.setState(selectedCells, removeSelected);
+
+    if (this.state.multiSelectIsEnabled) {
+      // multiselect is enabled
+      if (index > -1) {
+        const filteredSelectedCells = this.state.selectedCells.filter(
+          (number) => number !== puzzleCellNumber
+        );
+        this.setState({
+          selectedCells: filteredSelectedCells,
+        });
+      } else {
+        const selectedCells = [...this.state.selectedCells];
+        selectedCells.push(puzzleCellNumber);
+        this.setState({
+          selectedCells: selectedCells,
+        });
+      }
     } else {
-      //TODO: uncomment this or replace with a setState
-      // this.state.selectedCells.push(puzzleCellNumber);
+      // multiselect is disabled
+      if (index > -1) {
+        this.setState({ selectedCells: [] });
+      } else {
+        this.setState({ selectedCells: [puzzleCellNumber] });
+      }
     }
-  }
+  };
+
+  toggleMultiSelect = (value) => {
+    this.setState({ multiSelectIsEnabled: value });
+  };
 
   render() {
     return (
@@ -39,21 +59,70 @@ export default class Board extends Component {
         <HStack style={styles.row}>
           <Square
             squareData={this.state.squares[0]}
+            squareNumber={0}
+            toggleCellSelection={this.toggleCellSelection}
+            multiSelectIsEnabled={this.state.multiSelectIsEnabled}
+          />
+          <Square
+            squareData={this.state.squares[1]}
             squareNumber={1}
             toggleCellSelection={this.toggleCellSelection}
+            multiSelectIsEnabled={this.state.multiSelectIsEnabled}
           />
-          <Square squareData={this.state.squares[1]} />
-          <Square squareData={this.state.squares[2]} />
+          <Square
+            squareData={this.state.squares[2]}
+            squareNumber={2}
+            toggleCellSelection={this.toggleCellSelection}
+            multiSelectIsEnabled={this.state.multiSelectIsEnabled}
+          />
         </HStack>
         <HStack style={styles.row}>
-          <Square squareData={this.state.squares[3]} />
-          <Square squareData={this.state.squares[4]} />
-          <Square squareData={this.state.squares[5]} />
+          <Square
+            squareData={this.state.squares[3]}
+            squareNumber={3}
+            toggleCellSelection={this.toggleCellSelection}
+            multiSelectIsEnabled={this.state.multiSelectIsEnabled}
+          />
+          <Square
+            squareData={this.state.squares[4]}
+            squareNumber={4}
+            toggleCellSelection={this.toggleCellSelection}
+            multiSelectIsEnabled={this.state.multiSelectIsEnabled}
+          />
+          <Square
+            squareData={this.state.squares[5]}
+            squareNumber={5}
+            toggleCellSelection={this.toggleCellSelection}
+            multiSelectIsEnabled={this.state.multiSelectIsEnabled}
+          />
         </HStack>
         <HStack style={styles.row}>
-          <Square squareData={this.state.squares[6]} />
-          <Square squareData={this.state.squares[7]} />
-          <Square squareData={this.state.squares[8]} />
+          <Square
+            squareData={this.state.squares[6]}
+            squareNumber={6}
+            toggleCellSelection={this.toggleCellSelection}
+            multiSelectIsEnabled={this.state.multiSelectIsEnabled}
+          />
+          <Square
+            squareData={this.state.squares[7]}
+            squareNumber={7}
+            toggleCellSelection={this.toggleCellSelection}
+            multiSelectIsEnabled={this.state.multiSelectIsEnabled}
+          />
+          <Square
+            squareData={this.state.squares[8]}
+            squareNumber={8}
+            toggleCellSelection={this.toggleCellSelection}
+            multiSelectIsEnabled={this.state.multiSelectIsEnabled}
+          />
+        </HStack>
+        <HStack style={styles.row}>
+          <Text>Multiselect </Text>
+          <Switch
+            trackColor={{ false: "#767577", true: "#81b0ff" }}
+            onValueChange={this.toggleMultiSelect}
+            value={this.state.multiSelectIsEnabled}
+          />
         </HStack>
       </View>
     );
